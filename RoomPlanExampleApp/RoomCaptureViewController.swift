@@ -7,6 +7,7 @@ The sample app's main view controller that manages the scanning process.
 
 import UIKit
 import RoomPlan
+import Supabase
 
 class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, RoomCaptureSessionDelegate {
     
@@ -99,13 +100,56 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
             try jsonData.write(to: capturedRoomURL)
             try finalResults?.export(to: destinationURL, exportOptions: .mesh)
 
-            let activityVC = UIActivityViewController(activityItems: [destinationFolderURL], applicationActivities: nil)
-            activityVC.modalPresentationStyle = .popover
-            
-            present(activityVC, animated: true, completion: nil)
-            if let popOver = activityVC.popoverPresentationController {
-                popOver.sourceView = self.exportButton
+            Task {
+                do {
+                    guard let supabaseKey = ProcessInfo.processInfo
+                        .environment["SUPABASE_KEY"] else {
+                        throw NSError(
+                            domain: "Supabase",
+                            code: 1,
+                            userInfo: [
+                                NSLocalizedDescriptionKey:
+                                    "SUPABASE_KEY environment variable not found"
+                            ]
+                        )
+                    }
+
+                    let supabase = SupabaseClient(
+                        supabaseURL: URL(
+                            string: "https://ikswhcyfnqipzakncruf.supabase.co"
+                        )!,
+                        supabaseKey: supabaseKey
+                    )
+
+                    // Read the USDZ file
+                    let fileData = try Data(contentsOf: destinationURL)
+
+                    // Upload to "assets" bucket
+                    try await supabase.storage
+                        .from("assets")
+                        .upload(
+                            "Room.usdz",
+                            data: fileData,
+                            options: FileOptions(
+                                contentType: "model/vnd.usdz+zip",
+                                upsert: true
+                            )
+                        )
+                    
+                    print("Successfully uploaded Room.usdz")
+
+                    await MainActor.run {
+                        let activityVC = UIActivityViewController(activityItems: [destinationFolderURL], applicationActivities: nil)
+                        activityVC.modalPresentationStyle = .popover
+                        
+                        present(activityVC, animated: true, completion: nil)
+                        if let popOver = activityVC.popoverPresentationController {
+                            popOver.sourceView = self.exportButton
+                        }
+                    }
+                }
             }
+
         } catch {
             print("Error = \(error)")
         }
