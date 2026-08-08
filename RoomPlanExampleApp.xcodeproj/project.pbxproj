@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		71B6638528D0CABC00635A15 /* UnsupportedDevice.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71B6638328D0CABC00635A15 /* UnsupportedDevice.storyboard */; };
+		A27E906E3026C1E500BDD529 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = A27E906D3026C1E500BDD529 /* Storage */; };
+		A27E90713026D0D100BDD529 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = A27E90703026D0D100BDD529 /* Auth */; };
+		A27E90733026D0D100BDD529 /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = A27E90723026D0D100BDD529 /* Functions */; };
+		A27E90753026D0D100BDD529 /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = A27E90743026D0D100BDD529 /* PostgREST */; };
+		A27E90773026D0D100BDD529 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = A27E90763026D0D100BDD529 /* Realtime */; };
+		A27E90793026D0D100BDD529 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = A27E90783026D0D100BDD529 /* Storage */; };
+		A27E907B3026D0D100BDD529 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = A27E907A3026D0D100BDD529 /* Supabase */; };
 		ACEF94B12820AD2300776A9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEF94B02820AD2300776A9D /* AppDelegate.swift */; };
 		ACEF94B32820AD2300776A9D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEF94B22820AD2300776A9D /* SceneDelegate.swift */; };
 		ACEF94B52820AD2300776A9D /* RoomCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEF94B42820AD2300776A9D /* RoomCaptureViewController.swift */; };
@@ -19,7 +26,7 @@
 
 /* Begin PBXFileReference section */
 		05C7567A6B268FC70FFB0FCC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		35A95C3C90A8D7FA01AA694A /* SampleCode.xcconfig */ = {isa = PBXFileReference; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
+		35A95C3C90A8D7FA01AA694A /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
 		71B6638428D0CABC00635A15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/UnsupportedDevice.storyboard; sourceTree = "<group>"; };
 		ACEF94AD2820AD2300776A9D /* RoomPlanExampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoomPlanExampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACEF94B02820AD2300776A9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -30,7 +37,7 @@
 		ACEF94BC2820AD2400776A9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ACEF94BE2820AD2400776A9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ACEF94C52820AF6600776A9D /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
-		CD4891E2C9F3F7012DE25B49 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE.txt; sourceTree = "<group>"; };
+		CD4891E2C9F3F7012DE25B49 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +45,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A27E907B3026D0D100BDD529 /* Supabase in Frameworks */,
+				A27E90793026D0D100BDD529 /* Storage in Frameworks */,
+				A27E90753026D0D100BDD529 /* PostgREST in Frameworks */,
+				A27E90733026D0D100BDD529 /* Functions in Frameworks */,
+				A27E90713026D0D100BDD529 /* Auth in Frameworks */,
+				A27E90773026D0D100BDD529 /* Realtime in Frameworks */,
+				A27E906E3026C1E500BDD529 /* Storage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,6 +155,9 @@
 				Base,
 			);
 			mainGroup = ACEF94A42820AD2300776A9D;
+			packageReferences = (
+				A27E906F3026D0D100BDD529 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			productRefGroup = ACEF94AE2820AD2300776A9D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -333,7 +350,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6348U8M9T5;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RoomPlanExampleApp/Info.plist;
@@ -348,7 +365,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.RoomPlanExampleApp${SAMPLE_CODE_DISAMBIGUATOR}";
+				PRODUCT_BUNDLE_IDENTIFIER = respondR.respondR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -367,7 +384,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6348U8M9T5;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RoomPlanExampleApp/Info.plist;
@@ -382,7 +399,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.RoomPlanExampleApp${SAMPLE_CODE_DISAMBIGUATOR}";
+				PRODUCT_BUNDLE_IDENTIFIER = respondR.respondR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -414,6 +431,67 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A27E906C3026C1E500BDD529 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+			traits = (
+			);
+		};
+		A27E906F3026D0D100BDD529 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+			traits = (
+			);
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A27E906D3026C1E500BDD529 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A27E906C3026C1E500BDD529 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		A27E90703026D0D100BDD529 /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A27E906F3026D0D100BDD529 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		A27E90723026D0D100BDD529 /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A27E906F3026D0D100BDD529 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		A27E90743026D0D100BDD529 /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A27E906F3026D0D100BDD529 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		A27E90763026D0D100BDD529 /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A27E906F3026D0D100BDD529 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		A27E90783026D0D100BDD529 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A27E906F3026D0D100BDD529 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		A27E907A3026D0D100BDD529 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A27E906F3026D0D100BDD529 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = ACEF94A52820AD2300776A9D /* Project object */;
 }
