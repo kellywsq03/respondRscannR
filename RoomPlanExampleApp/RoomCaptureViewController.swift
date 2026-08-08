@@ -91,7 +91,7 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
     // exports both in a single USDZ.
     @IBAction func exportResults(_ sender: UIButton) {
         let destinationFolderURL = FileManager.default.temporaryDirectory.appending(path: "Export")
-        let destinationURL = destinationFolderURL.appending(path: "Room.usdz")
+        let destinationURL = destinationFolderURL.appending(path: "Room-\(UUID().uuidString).usdz")
         let capturedRoomURL = destinationFolderURL.appending(path: "Room.json")
         do {
             try FileManager.default.createDirectory(at: destinationFolderURL, withIntermediateDirectories: true)
@@ -118,7 +118,8 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
                         supabaseURL: URL(
                             string: "https://ikswhcyfnqipzakncruf.supabase.co"
                         )!,
-                        supabaseKey: supabaseKey
+                        supabaseKey: supabaseKey,
+                        options: .init(auth: .init(emitLocalSessionAsInitialSession: true))
                     )
 
                     // Read the USDZ file
@@ -147,6 +148,9 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
                             popOver.sourceView = self.exportButton
                         }
                     }
+                } catch {
+                    print("Supabase error:")
+                    print(error)
                 }
             }
 
