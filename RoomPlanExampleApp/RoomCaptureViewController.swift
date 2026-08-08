@@ -162,14 +162,15 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
 
             Task {
                 do {
-                    guard let supabaseKey = ProcessInfo.processInfo
-                        .environment["SUPABASE_KEY"] else {
+                    guard let supabaseKey = Bundle.main.object(
+                        forInfoDictionaryKey: "SUPABASE_KEY"
+                    ) as? String else {
                         throw NSError(
                             domain: "Supabase",
                             code: 1,
                             userInfo: [
                                 NSLocalizedDescriptionKey:
-                                    "SUPABASE_KEY environment variable not found"
+                                    "SUPABASE_KEY not found in Info.plist"
                             ]
                         )
                     }
