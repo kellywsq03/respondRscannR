@@ -91,13 +91,9 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
     // exports both in a single USDZ.
     @IBAction func exportResults(_ sender: UIButton) {
         let destinationFolderURL = FileManager.default.temporaryDirectory.appending(path: "Export")
-        let destinationURL = destinationFolderURL.appending(path: "Room-\(UUID().uuidString).usdz")
-        let capturedRoomURL = destinationFolderURL.appending(path: "Room.json")
+        let fileName = "Room-\(UUID().uuidString).usdz"
+        let destinationURL = destinationFolderURL.appending(path: fileName)
         do {
-            try FileManager.default.createDirectory(at: destinationFolderURL, withIntermediateDirectories: true)
-            let jsonEncoder = JSONEncoder()
-            let jsonData = try jsonEncoder.encode(finalResults)
-            try jsonData.write(to: capturedRoomURL)
             try finalResults?.export(to: destinationURL, exportOptions: .mesh)
 
             Task {
@@ -129,7 +125,7 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
                     try await supabase.storage
                         .from("assets")
                         .upload(
-                            "Room.usdz",
+                            fileName,
                             data: fileData,
                             options: FileOptions(
                                 contentType: "model/vnd.usdz+zip",
@@ -137,17 +133,8 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
                             )
                         )
                     
-                    print("Successfully uploaded Room.usdz")
+                    print("Successfully uploaded\(fileName)")
 
-                    await MainActor.run {
-                        let activityVC = UIActivityViewController(activityItems: [destinationFolderURL], applicationActivities: nil)
-                        activityVC.modalPresentationStyle = .popover
-                        
-                        present(activityVC, animated: true, completion: nil)
-                        if let popOver = activityVC.popoverPresentationController {
-                            popOver.sourceView = self.exportButton
-                        }
-                    }
                 } catch {
                     print("Supabase error:")
                     print(error)
