@@ -7,6 +7,7 @@ The sample app's main view controller that manages the scanning process.
 
 import UIKit
 import RoomPlan
+import Supabase
 
 class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, RoomCaptureSessionDelegate {
     
@@ -89,26 +90,163 @@ class RoomCaptureViewController: UIViewController, RoomCaptureViewDelegate, Room
     // Alternatively, `.parametric` exports the model as unit-sized cubes and `.all`
     // exports both in a single USDZ.
     @IBAction func exportResults(_ sender: UIButton) {
-        let destinationFolderURL = FileManager.default.temporaryDirectory.appending(path: "Export")
-        let destinationURL = destinationFolderURL.appending(path: "Room.usdz")
-        let capturedRoomURL = destinationFolderURL.appending(path: "Room.json")
-        do {
-            try FileManager.default.createDirectory(at: destinationFolderURL, withIntermediateDirectories: true)
-            let jsonEncoder = JSONEncoder()
-            let jsonData = try jsonEncoder.encode(finalResults)
-            try jsonData.write(to: capturedRoomURL)
-            try finalResults?.export(to: destinationURL, exportOptions: .mesh)
+        // Ask user for a room name before exporting
+        let alert = UIAlertController(
+            title: "Export Room",
+            message: "Enter a name for your room.",
+            preferredStyle: .alert
+        )
 
-            let activityVC = UIActivityViewController(activityItems: [destinationFolderURL], applicationActivities: nil)
-            activityVC.modalPresentationStyle = .popover
-            
-            present(activityVC, animated: true, completion: nil)
-            if let popOver = activityVC.popoverPresentationController {
-                popOver.sourceView = self.exportButton
+        alert.addTextField { textField in
+            textField.placeholder = "Room name"
+            textField.text = "My Room"
+            textField.clearButtonMode = .whileEditing
+        }
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        alert.addAction(UIAlertAction(title: "Export", style: .default) { [weak self, weak alert] _ in
+            guard let self = self else { return }
+
+            // Get the name entered by the user
+            let roomName = alert?.textFields?.first?.text?
+                .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+
+            // Make sure the user entered a name
+            guard !roomName.isEmpty else {
+                self.showAlert(
+                    title: "Invalid Name",
+                    message: "Please enter a name for the room."
+                )
+                return
             }
+
+            // Remove characters that are invalid in filenames
+            let sanitizedName = roomName
+                .components(separatedBy: CharacterSet(charactersIn: "/\\:?%*|\"<>"))
+                .joined(separator: "-")
+
+            self.exportRoom(named: sanitizedName)
+        })
+
+        present(alert, animated: true)
+    }
+
+    private func exportRoom(named roomName: String) {
+        let destinationFolderURL = FileManager.default.temporaryDirectory
+            .appending(path: "Export")
+
+        // Create the export folder if it doesn't exist
+        do {
+            try FileManager.default.createDirectory(
+                at: destinationFolderURL,
+                withIntermediateDirectories: true
+            )
+        } catch {
+            showAlert(
+                title: "Export Failed",
+                message: "Could not create the export folder."
+            )
+            return
+        }
+
+        let fileName = "\(roomName).usdz"
+        let destinationURL = destinationFolderURL.appending(path: fileName)
+
+        do {
+            // Export the RealityKit result
+            try finalResults?.export(
+                to: destinationURL,
+                exportOptions: .mesh
+            )
+
+            Task {
+                do {
+                    guard let supabaseKey = Bundle.main.object(
+                        forInfoDictionaryKey: "SUPABASE_KEY"
+                    ) as? String else {
+                        throw NSError(
+                            domain: "Supabase",
+                            code: 1,
+                            userInfo: [
+                                NSLocalizedDescriptionKey:
+                                    "SUPABASE_KEY not found in Info.plist"
+                            ]
+                        )
+                    }
+
+                    let supabase = SupabaseClient(
+                        supabaseURL: URL(
+                            string: "https://ikswhcyfnqipzakncruf.supabase.co"
+                        )!,
+                        supabaseKey: supabaseKey,
+                        options: .init(
+                            auth: .init(
+                                emitLocalSessionAsInitialSession: true
+                            )
+                        )
+                    )
+
+                    // Read the USDZ file
+                    let fileData = try Data(contentsOf: destinationURL)
+
+                    // Upload to Supabase
+                    try await supabase.storage
+                        .from("assets")
+                        .upload(
+                            fileName,
+                            data: fileData,
+                            options: FileOptions(
+                                contentType: "model/vnd.usdz+zip",
+                                upsert: true
+                            )
+                        )
+
+                    print("Successfully uploaded \(fileName)")
+
+                    // UI updates must happen on the main thread
+                    await MainActor.run {
+                        self.showAlert(
+                            title: "Export Successful",
+                            message: "\"\(roomName)\" has been exported successfully."
+                        )
+                    }
+
+                } catch {
+                    print("Supabase error:")
+                    print(error)
+
+                    await MainActor.run {
+                        self.showAlert(
+                            title: "Export Failed",
+                            message: error.localizedDescription
+                        )
+                    }
+                }
+            }
+
         } catch {
             print("Error = \(error)")
+
+            showAlert(
+                title: "Export Failed",
+                message: error.localizedDescription
+            )
         }
+    }
+
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+
+        alert.addAction(
+            UIAlertAction(title: "OK", style: .default)
+        )
+
+        present(alert, animated: true)
     }
     
     private func setActiveNavBar() {
